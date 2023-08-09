@@ -1,0 +1,28 @@
+{
+  "name": "openapi-typescript-wrapper-generator",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Kryštof Řezáč",
+  "main": "index.js",
+  "bin": {
+    "openapi-typescript-wrapper-generator": "bin/openapi-typescript-wrapper-generator"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "pnpm build && tsc --watch",
+    "lint:fix": "prettier . --write",
+    "lint": "prettier . --check",
+    "check:type": "tsc --noEmit",
+    "check:code": "pnpm check:type && pnpm lint"
+  },
+  "dependencies": {
+    "minimist": "^1.2.8",
+    "ts-morph": "^19.0.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.2",
+    "prettier": "^3.0.1",
+    "typescript": "^5.1.6"
+  }
+}

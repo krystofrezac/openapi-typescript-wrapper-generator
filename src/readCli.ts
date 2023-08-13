@@ -40,7 +40,9 @@ export const readCli = (): CliOptions => {
   const wrapperAbsolutePath = relativePathToAbsolute(wrapperRelativePath);
 
   const wrapperTypeRelativePath = argv.wrapperTypePath;
-  const wrapperTypeAbsolutePath = relativePathToAbsolute(wrapperTypeRelativePath);
+  const wrapperTypeAbsolutePath = relativePathToAbsolute(
+    wrapperTypeRelativePath,
+  );
 
   const configurationRelativePath = argv.configurationPath;
   const configurationAbsolutePath = relativePathToAbsolute(
@@ -57,7 +59,7 @@ export const readCli = (): CliOptions => {
   return {
     sourceDirectoryAbsolutePath,
     wrapperAbsolutePath,
-    wrapperTypeAbsolutePath ,
+    wrapperTypeAbsolutePath,
     configurationAbsolutePath,
     outputRelativePath,
     outputAbsolutePath,

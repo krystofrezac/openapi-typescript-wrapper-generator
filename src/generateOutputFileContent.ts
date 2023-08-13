@@ -36,11 +36,11 @@ const getImports = (
     cliOptions.wrapperTypeAbsolutePath,
   );
   const relativePathToTypeWrapper = removeExtensionFromPath(
-    relativePathToTypeWrapperWithExtension ,
+    relativePathToTypeWrapperWithExtension,
   );
   const wrapperTypeImportName = cliOptions.wrapperTypeExportName
     ? `{${cliOptions.wrapperTypeExportName} as ${WRAPPER_TYPE_NAME}}`
-    : WRAPPER_TYPE_NAME
+    : WRAPPER_TYPE_NAME;
 
   const relativePathToConfigurationWithExtension = path.relative(
     cliOptions.sourceDirectoryAbsolutePath,
@@ -87,20 +87,19 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
 
     const endpointProperties = group.methodNames
       .map(methodName => {
-        const wrapperOptions = `{filePath, groupName: '${groupName}', endpointName: '${methodName}'}`
+        const wrapperOptions = `{filePath, groupName: '${groupName}', endpointName: '${methodName}'}`;
 
         return `  ${methodName}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${methodName}, ${wrapperOptions})`;
       })
       .join(',\n');
 
-      const endpointTypeProperties = group.methodNames
+    const endpointTypeProperties = group.methodNames
       .map(methodName => {
-        const wrapperOptions = `{filePath: typeof filePath, groupName: '${groupName}', endpointName: '${methodName}'}`
+        const wrapperOptions = `{filePath: typeof filePath, groupName: '${groupName}', endpointName: '${methodName}'}`;
 
         return `  ${methodName}: ${WRAPPER_TYPE_NAME}<typeof ${classVariableName}.${methodName}, ${wrapperOptions}>`;
       })
       .join(';\n');
-
 
     return arrayToLines([
       `export const ${lowerCasedGroupName} = {`,
@@ -108,7 +107,7 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
       '}',
       `export type ${lowerCasedGroupName} = {`,
       endpointTypeProperties,
-      '}'
+      '}',
     ]);
   });
 

@@ -1,19 +1,38 @@
 {
   "name": "openapi-typescript-wrapper-generator",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "author": "Kryštof Řezáč",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krystofrezac/openapi-typescript-wrapper-generator.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "openapi",
+    "typescript",
+    "wrapper",
+    "generator"
+  ],
   "main": "index.js",
   "bin": {
     "openapi-typescript-wrapper-generator": "bin/openapi-typescript-wrapper-generator"
   },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "bin/",
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "pnpm build && tsc --watch",
     "lint:fix": "prettier . --write",
     "lint": "prettier . --check",
     "check:type": "tsc --noEmit",
-    "check:code": "pnpm check:type && pnpm lint"
+    "check:code": "pnpm check:type && pnpm lint",
+    "clean": "git clean -Xdf",
+    "prepublishOnly": "pnpm clean && pnpm install && pnpm check:code && pnpm build"
   },
   "dependencies": {
     "minimist": "^1.2.8",

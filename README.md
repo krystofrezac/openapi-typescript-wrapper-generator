@@ -92,11 +92,11 @@ Tool for generating typescript wrappers around generated code from [OpenAPI Gene
 
    const filePath = 'src/generated/todos/wrapper.ts'
 
-   export const todos = {
+   export const todosEndpoints = {
      getTodos: wrapper(todosApi.getTodos, {filePath, groupName: 'Todos', endpointName: 'getTodos'}),
      addTodo: wrapper(todosApi.addTodo, {filePath, groupName: 'Todos', endpointName: 'addTodos'}),
    }
-   export type todos = {
+   export type todosEndpoints = {
      getTodos: Wrapper<typeof todosApi.getTodos, {filePath: typeof filePath, groupName: 'Todos', endpointName: 'getTodos'})>;
      addTodo: Wrapper<typeof todosApi.addTodo, {filePath: typeof filePath, groupName: 'Todos', endpointName: 'addTodos'}>;
    }

@@ -79,15 +79,16 @@ const getFilePathVariable = (cliOptions: CliOptions) =>
 
 const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
   const wrappedGroups = endpointGroups.map(group => {
-    const groupName =
+    const className =
       group.className.match(BEFORE_API_SUFFIX_REGEX)?.[0] ?? 'unknown';
-    const lowerCasedGroupName = lowerCaseFirstLetter(groupName);
+    const lowerCasedClassName = lowerCaseFirstLetter(className);
+    const groupName = `${lowerCasedClassName}Endpoints`;
 
     const classVariableName = getClassInstanceVariableName(group.className);
 
     const endpointProperties = group.methodNames
       .map(methodName => {
-        const wrapperOptions = `{filePath, groupName: '${groupName}', endpointName: '${methodName}'}`;
+        const wrapperOptions = `{filePath, groupName: '${className}', endpointName: '${methodName}'}`;
 
         return `  ${methodName}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${methodName}, ${wrapperOptions})`;
       })
@@ -95,17 +96,17 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
 
     const endpointTypeProperties = group.methodNames
       .map(methodName => {
-        const wrapperOptions = `{filePath: typeof filePath, groupName: '${groupName}', endpointName: '${methodName}'}`;
+        const wrapperOptions = `{filePath: typeof filePath, groupName: '${className}', endpointName: '${methodName}'}`;
 
         return `  ${methodName}: ${WRAPPER_TYPE_NAME}<typeof ${classVariableName}.${methodName}, ${wrapperOptions}>`;
       })
       .join(';\n');
 
     return arrayToLines([
-      `export const ${lowerCasedGroupName} = {`,
+      `export const ${groupName} = {`,
       endpointProperties,
       '}',
-      `export type ${lowerCasedGroupName} = {`,
+      `export type ${groupName} = {`,
       endpointTypeProperties,
       '}',
     ]);

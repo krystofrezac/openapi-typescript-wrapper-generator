@@ -14,7 +14,8 @@
     "wrapper",
     "generator"
   ],
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "openapi-typescript-wrapper-generator": "bin/openapi-typescript-wrapper-generator"
   },

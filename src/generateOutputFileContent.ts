@@ -90,7 +90,7 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
       .map(methodName => {
         const wrapperOptions = `{filePath, groupName: '${className}', endpointName: '${methodName}'}`;
 
-        return `  ${methodName}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${methodName}, ${wrapperOptions})`;
+        return `  ${methodName}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${methodName}.bind(${classVariableName}), ${wrapperOptions})`;
       })
       .join(',\n');
 

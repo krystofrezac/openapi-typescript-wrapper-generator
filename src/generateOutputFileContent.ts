@@ -13,6 +13,11 @@ import { removeExtensionFromPath } from './helpers/removeExtensionFromPath';
 
 const BEFORE_API_SUFFIX_REGEX = /.*(?=Api)/;
 
+const maybeAddDeprecatedComment = (line: string, isDeprecated: boolean) => {
+  if (!isDeprecated) return line;
+  return ['  /** @deprecated */', line].join('\n');
+};
+
 const getImports = (
   endpointGroups: EndpointGroup[],
   cliOptions: CliOptions,
@@ -86,19 +91,27 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
 
     const classVariableName = getClassInstanceVariableName(group.className);
 
-    const endpointProperties = group.methodNames
-      .map(methodName => {
-        const wrapperOptions = `{filePath, groupName: '${className}', endpointName: '${methodName}'}`;
+    const endpointProperties = group.methods
+      .map(method => {
+        const wrapperOptions = `{filePath, groupName: '${className}', endpointName: '${method.name}'}`;
 
-        return `  ${methodName}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${methodName}.bind(${classVariableName}), ${wrapperOptions})`;
+        const codeWithDeprecatedComment = maybeAddDeprecatedComment(
+          `  ${method.name}: ${WRAPPER_FUNCTION_NAME}(${classVariableName}.${method.name}.bind(${classVariableName}), ${wrapperOptions})`,
+          method.isDeprecated,
+        );
+        return codeWithDeprecatedComment;
       })
       .join(',\n');
 
-    const endpointTypeProperties = group.methodNames
-      .map(methodName => {
-        const wrapperOptions = `{filePath: typeof filePath, groupName: '${className}', endpointName: '${methodName}'}`;
+    const endpointTypeProperties = group.methods
+      .map(method => {
+        const wrapperOptions = `{filePath: typeof filePath, groupName: '${className}', endpointName: '${method.name}'}`;
 
-        return `  ${methodName}: ${WRAPPER_TYPE_NAME}<typeof ${classVariableName}.${methodName}, ${wrapperOptions}>`;
+        const codeWithDeprecatedComment = maybeAddDeprecatedComment(
+          `  ${method.name}: ${WRAPPER_TYPE_NAME}<typeof ${classVariableName}.${method.name}, ${wrapperOptions}>`,
+          method.isDeprecated,
+        );
+        return codeWithDeprecatedComment;
       })
       .join(';\n');
 

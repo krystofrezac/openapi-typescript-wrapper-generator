@@ -2,7 +2,6 @@ import path from 'path';
 
 import { EndpointGroup } from './getEndpointGroups';
 import { arrayToLines } from './helpers/arrayToLines';
-import { CliOptions } from './readCli';
 import {
   CONFIGURATION_FUNCTION_NAME,
   WRAPPER_FUNCTION_NAME,
@@ -10,6 +9,7 @@ import {
 } from './constants';
 import { lowerCaseFirstLetter } from './helpers/lowerCaseFirstLetter';
 import { removeExtensionFromPath } from './helpers/removeExtensionFromPath';
+import { Config } from './types';
 
 const BEFORE_API_SUFFIX_REGEX = /.*(?=Api)/;
 
@@ -18,45 +18,42 @@ const maybeAddDeprecatedComment = (line: string, isDeprecated: boolean) => {
   return ['  /** @deprecated */', line].join('\n');
 };
 
-const getImports = (
-  endpointGroups: EndpointGroup[],
-  cliOptions: CliOptions,
-) => {
+const getImports = (endpointGroups: EndpointGroup[], config: Config) => {
   const classNames = endpointGroups.map(group => group.className);
   const joinedClassNames = classNames.join(', ');
 
   const relativePathToWrapperWithExtension = path.relative(
-    cliOptions.sourceDirectoryAbsolutePath,
-    cliOptions.wrapperAbsolutePath,
+    config.sourceDirectoryAbsolutePath,
+    config.wrapperAbsolutePath,
   );
   const relativePathToWrapper = removeExtensionFromPath(
     relativePathToWrapperWithExtension,
   );
-  const wrapperImportName = cliOptions.wrapperExportName
-    ? `{${cliOptions.wrapperExportName} as ${WRAPPER_FUNCTION_NAME}}`
+  const wrapperImportName = config.wrapperExportName
+    ? `{${config.wrapperExportName} as ${WRAPPER_FUNCTION_NAME}}`
     : WRAPPER_FUNCTION_NAME;
 
   const relativePathToTypeWrapperWithExtension = path.relative(
-    cliOptions.sourceDirectoryAbsolutePath,
-    cliOptions.wrapperTypeAbsolutePath,
+    config.sourceDirectoryAbsolutePath,
+    config.wrapperTypeAbsolutePath,
   );
   const relativePathToTypeWrapper = removeExtensionFromPath(
     relativePathToTypeWrapperWithExtension,
   );
-  const wrapperTypeImportName = cliOptions.wrapperTypeExportName
-    ? `{${cliOptions.wrapperTypeExportName} as ${WRAPPER_TYPE_NAME}}`
+  const wrapperTypeImportName = config.wrapperTypeExportName
+    ? `{${config.wrapperTypeExportName} as ${WRAPPER_TYPE_NAME}}`
     : WRAPPER_TYPE_NAME;
 
   const relativePathToConfigurationWithExtension = path.relative(
-    cliOptions.sourceDirectoryAbsolutePath,
-    cliOptions.configurationAbsolutePath,
+    config.sourceDirectoryAbsolutePath,
+    config.configurationAbsolutePath,
   );
   const relativePathToConfiguration = removeExtensionFromPath(
     relativePathToConfigurationWithExtension,
   );
 
-  const configurationImportName = cliOptions.configurationExportName
-    ? `{${cliOptions.configurationExportName} as ${CONFIGURATION_FUNCTION_NAME}}`
+  const configurationImportName = config.configurationExportName
+    ? `{${config.configurationExportName} as ${CONFIGURATION_FUNCTION_NAME}}`
     : CONFIGURATION_FUNCTION_NAME;
 
   return arrayToLines([
@@ -79,8 +76,8 @@ const getClassInitializations = (endpointGroups: EndpointGroup[]) => {
   return arrayToLines(initializations);
 };
 
-const getFilePathVariable = (cliOptions: CliOptions) =>
-  `const filePath = '${cliOptions.outputRelativePath}'`;
+const getFilePathVariable = (config: Config) =>
+  `const filePath = '${config.outputAbsolutePath}'`;
 
 const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
   const wrappedGroups = endpointGroups.map(group => {
@@ -130,11 +127,11 @@ const getWrappedEndpoints = (endpointGroups: EndpointGroup[]) => {
 
 export const generateOutputFileContent = (
   endpointGroups: EndpointGroup[],
-  cliOptions: CliOptions,
+  config: Config,
 ) => {
-  const imports = getImports(endpointGroups, cliOptions);
+  const imports = getImports(endpointGroups, config);
   const classInitializations = getClassInitializations(endpointGroups);
-  const filePathVariable = getFilePathVariable(cliOptions);
+  const filePathVariable = getFilePathVariable(config);
   const wrappedEndpoints = getWrappedEndpoints(endpointGroups);
 
   return arrayToLines(

@@ -1,8 +1,8 @@
 import path from 'path';
 
 import { Project } from 'ts-morph';
-import { CliOptions } from './readCli';
 import { API_FILE_NAME_WITH_EXTENSION } from './constants';
+import { Config } from './types';
 
 type EndpointGroupMethod = {
   name: string;
@@ -16,9 +16,9 @@ export type EndpointGroup = {
 
 const DEPRECATED_TAG_NAME = 'deprecated';
 
-export const getEndpointGroups = (project: Project, cliOptions: CliOptions) => {
+export const getEndpointGroups = (project: Project, config: Config) => {
   const apiFilePath = path.join(
-    cliOptions.sourceDirectoryAbsolutePath,
+    config.sourceDirectoryAbsolutePath,
     API_FILE_NAME_WITH_EXTENSION,
   );
 

@@ -1,19 +1,7 @@
 import minimist from 'minimist';
 import { z } from 'zod';
 import { relativePathToAbsolute } from './helpers/relativePathToAbsolute';
-
-export type CliOptions = {
-  sourceDirectoryAbsolutePath: string;
-  wrapperAbsolutePath: string;
-  wrapperTypeAbsolutePath: string;
-  configurationAbsolutePath: string;
-  outputRelativePath: string;
-  outputAbsolutePath: string;
-
-  wrapperExportName?: string;
-  wrapperTypeExportName?: string;
-  configurationExportName?: string;
-};
+import { Config } from './types';
 
 const argvSchema = z.object({
   _: z.tuple([z.string()]),
@@ -27,7 +15,7 @@ const argvSchema = z.object({
   configurationExportName: z.string().optional(),
 });
 
-export const readCli = (): CliOptions => {
+export const readCli = (): Config => {
   const argvRaw = minimist(process.argv.slice(2));
   const argv = argvSchema.parse(argvRaw);
 
@@ -61,7 +49,6 @@ export const readCli = (): CliOptions => {
     wrapperAbsolutePath,
     wrapperTypeAbsolutePath,
     configurationAbsolutePath,
-    outputRelativePath,
     outputAbsolutePath,
 
     wrapperExportName,

@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-wrapper-generator",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "",
   "author": "Kryštof Řezáč",
   "repository": {
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
+    "@types/node": "^20.11.30",
     "prettier": "^3.0.1",
     "typescript": "^5.1.6"
   }

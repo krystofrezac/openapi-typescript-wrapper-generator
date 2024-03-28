@@ -2,6 +2,10 @@
 
 Tool for generating typescript wrappers around generated code from [OpenAPI Generator](https://openapi-generator.tech/)
 
+## Prerequisites
+
+- Generate code with `openapi-generator` (set `useSingleRequestParameter` to `true`)
+
 ## Quick start
 
 1. Create wrapper function and wrapper type. For example here is wrapper for [TanStack Query](https://tanstack.com/query/latest):
@@ -118,6 +122,16 @@ Options:
   --configurationPath         Relative path to file that contains configuration object
   --configurationExportName   Optional, if configuration object is exported as named export, provide the name under which it's exported
   --outputPath                Relative path to file where generated code should be outputted
+```
+
+## JS api
+
+```ts
+import { generateWrappers } from './generateWrappers';
+
+generateWrappers({
+  // To find out what to send, look at the types
+});
 ```
 
 ## Compatibility
